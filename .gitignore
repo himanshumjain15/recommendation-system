@@ -1,0 +1,21 @@
+# Local context — never push
+CLAUDE.md
+.claude/
+
+# Environment / secrets
+.env
+.venv/
+venv/
+
+# Raw/processed data — downloaded via README instructions, not committed
+sample_data/inputs/
+sample_data/outputs/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
