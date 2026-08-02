@@ -13,5 +13,19 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
+  api:
+    build: .
+    container_name: recsys_api
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-recsys}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-recsys_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-recsys}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+
 volumes:
   postgres_data:

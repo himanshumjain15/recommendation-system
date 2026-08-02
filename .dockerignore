@@ -1,0 +1,11 @@
+.venv/
+.git/
+.claude/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+notebooks/
+sample_data/
+.env
+README.md
+CLAUDE.md
