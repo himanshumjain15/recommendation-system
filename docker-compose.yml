@@ -16,6 +16,7 @@ services:
   api:
     build: .
     container_name: recsys_api
+    restart: unless-stopped
     depends_on:
       - postgres
     ports:
