@@ -146,12 +146,10 @@ rather than avoided:
 
 ## Known limitations
 
-- **Counterfactual bias**: the A/B test evaluates against historical held-out data, not
-  live user reactions — a known limitation of offline recommender evaluation, not a true
-  randomized live experiment.
-- **Small, fixed sample size** (~300 users/group): limits statistical power for smaller
-  effects; well-powered for the large effect actually observed, not guaranteed for smaller
-  ones.
-- **Hyperparameter tuning used the same held-out data as the final significance test**: the
-  hybrid's blend weight was tuned against the data later used to test significance — a
-  stricter design would use a separate validation set for tuning.
+- **This is an offline A/B test, not a live one**: it evaluates against historical
+  held-out data rather than real-time reactions to what was actually shown to users — a
+  known limitation of offline recommender evaluation, not a true randomized live
+  experiment.
+- **Small dataset**: MovieLens `ml-latest-small` (610 users, ~100K ratings) — enough to
+  demonstrate the full pipeline and produce a statistically significant result, but small
+  relative to production-scale recommender systems.
