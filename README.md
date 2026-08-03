@@ -144,14 +144,4 @@ rather than avoided:
   as an immediate fix, then resolved permanently by resizing the EBS volume to 20GB and
   extending the filesystem (`growpart` + `resize2fs`).
 
-## Known limitations
 
-- **Counterfactual bias**: the A/B test evaluates against historical held-out data, not
-  live user reactions — a known limitation of offline recommender evaluation, not a true
-  randomized live experiment.
-- **Small, fixed sample size** (~300 users/group): limits statistical power for smaller
-  effects; well-powered for the large effect actually observed, not guaranteed for smaller
-  ones.
-- **Hyperparameter tuning used the same held-out data as the final significance test**: the
-  hybrid's blend weight was tuned against the data later used to test significance — a
-  stricter design would use a separate validation set for tuning.
