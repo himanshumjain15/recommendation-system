@@ -12,114 +12,51 @@ _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(_PROJECT_ROOT, ".env"))
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
-CSS = """
+POSTER_CSS = """
 <style>
-.block-container { padding-top: 2.5rem; max-width: 1400px; }
+.block-container { padding-top: 2.5rem; max-width: 1500px; }
 
-.hero-title {
-    font-size: 3.4rem;
-    font-weight: 900;
-    letter-spacing: -1.5px;
-    line-height: 1.05;
-    margin: 0 0 0.6rem 0;
-}
+.hero-title { font-size: 3.6rem; font-weight: 900; letter-spacing: -2px; line-height: 1; margin: 0 0 .7rem 0; }
 .hero-title span { color: #E50914; }
-.hero-sub {
-    font-size: 1.15rem;
-    color: #B3B3B3;
-    max-width: 720px;
-    line-height: 1.5;
-    margin-bottom: 0.4rem;
-}
-.hero-stat {
-    display: inline-block;
-    background: #E50914;
-    color: #fff;
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 6px 14px;
-    border-radius: 4px;
-    margin-bottom: 1.2rem;
-}
+.hero-stat { display: inline-block; background: #E50914; font-weight: 800; font-size: .9rem;
+             letter-spacing: .3px; padding: 7px 14px; border-radius: 4px; margin-bottom: 1rem; }
+.hero-sub { font-size: 1.1rem; color: #9A9A9A; max-width: 780px; line-height: 1.55; }
 
-.col-header {
-    font-size: 1.6rem;
-    font-weight: 800;
-    margin: 0.2rem 0 0.3rem 0;
-    letter-spacing: -0.4px;
-}
-.col-header.generic { color: #8C8C8C; }
-.col-header.personal { color: #FFFFFF; }
-.col-header.personal:before {
-    content: "";
-    display: inline-block;
-    width: 5px; height: 26px;
-    background: #E50914;
-    margin-right: 12px;
-    vertical-align: -4px;
-    border-radius: 2px;
-}
-.col-sub {
-    font-size: 1rem;
-    color: #A0A0A0;
-    line-height: 1.5;
-    margin-bottom: 1.4rem;
-    min-height: 76px;
-}
+.row-head { font-size: 1.5rem; font-weight: 800; letter-spacing: -.4px; margin: 0 0 .2rem 0; }
+.row-head.generic { color: #7E7E7E; }
+.row-head.personal:before { content: ""; display: inline-block; width: 5px; height: 24px;
+             background: #E50914; margin-right: 12px; vertical-align: -3px; border-radius: 2px; }
+.row-sub { font-size: 1rem; color: #8F8F8F; line-height: 1.5; margin-bottom: 1rem; }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-    gap: 22px 16px;
-}
-.card { position: relative; }
-.poster-wrap {
-    position: relative;
-    border-radius: 6px;
-    overflow: hidden;
-    background: #2A2A2A;
-    aspect-ratio: 2 / 3;
-    transition: transform .18s ease, box-shadow .18s ease;
-}
-.card:hover .poster-wrap {
-    transform: scale(1.06);
-    box-shadow: 0 12px 28px rgba(0,0,0,.75);
-}
-.poster-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.poster-fallback {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    padding: 10px; text-align: center;
-    font-size: .8rem; color: #7A7A7A;
-}
-.badge {
-    position: absolute; top: 8px; left: 8px;
-    background: #E50914; color: #fff;
-    font-size: .68rem; font-weight: 800;
-    letter-spacing: .5px; text-transform: uppercase;
-    padding: 4px 8px; border-radius: 3px;
-}
-.card-title {
-    font-size: .95rem; font-weight: 700;
-    margin-top: 10px; line-height: 1.3;
-}
-.card-genres {
-    font-size: .8rem; color: #8C8C8C;
-    margin-top: 3px; line-height: 1.35;
-}
-.summary {
-    border-left: 5px solid #E50914;
-    background: #1A1A1A;
-    padding: 18px 22px;
-    border-radius: 4px;
-    font-size: 1.15rem;
-    font-weight: 600;
-    margin-top: 2.5rem;
-}
+.score { display: inline-block; font-size: .74rem; font-weight: 800; letter-spacing: .5px;
+         padding: 4px 9px; border-radius: 3px; vertical-align: 5px; margin-left: 12px;
+         background: #262626; color: #8F8F8F; }
+.score.best { background: #E50914; color: #FFF; }
+
+.row { display: flex; gap: 14px; overflow-x: auto; padding: 12px 2px 16px 2px; }
+.row::-webkit-scrollbar { height: 8px; }
+.row::-webkit-scrollbar-track { background: #171717; border-radius: 4px; }
+.row::-webkit-scrollbar-thumb { background: #3A3A3A; border-radius: 4px; }
+.row:hover::-webkit-scrollbar-thumb { background: #5A5A5A; }
+
+.card { flex: 0 0 168px; }
+.poster { position: relative; border-radius: 5px; overflow: hidden; background: #232323;
+          aspect-ratio: 2/3; transition: transform .2s ease, box-shadow .2s ease; }
+.card:hover .poster { transform: scale(1.07); box-shadow: 0 14px 30px rgba(0,0,0,.8); }
+.poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.poster-alt { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+              padding: 12px; text-align: center; font-size: .82rem; color: #6E6E6E; }
+.badge { position: absolute; top: 8px; left: 8px; background: #E50914; font-size: .64rem;
+         font-weight: 800; letter-spacing: .6px; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; }
+.card-title { font-size: .92rem; font-weight: 700; margin-top: 10px; line-height: 1.3; }
+.card-genres { font-size: .78rem; color: #7E7E7E; margin-top: 3px; line-height: 1.3; }
+
+.summary { border-left: 5px solid #E50914; background: #161616; padding: 18px 22px;
+           border-radius: 4px; font-size: 1.1rem; font-weight: 600; margin-top: 1rem; }
 .summary b { color: #E50914; font-size: 1.35rem; }
 </style>
 """
-st.markdown(CSS, unsafe_allow_html=True)
+st.html(POSTER_CSS)
 
 
 @st.cache_data
@@ -148,7 +85,7 @@ def get_poster_url(tmdb_id):
         return None
 
 
-def render_grid(movie_ids, unique_ids=None):
+def render_row(movie_ids, unique_ids=None):
     cards = []
     for movie_id in movie_ids:
         row = movies[movies["movieId"] == movie_id]
@@ -161,10 +98,10 @@ def render_grid(movie_ids, unique_ids=None):
         tmdb_id = link_row["tmdbId"].values[0] if not link_row.empty else None
         poster_url = get_poster_url(tmdb_id)
 
-        img = (
+        art = (
             f'<img src="{poster_url}" alt="{title}">'
             if poster_url
-            else f'<div class="poster-fallback">{title}</div>'
+            else f'<div class="poster-alt">{title}</div>'
         )
         badge = (
             '<span class="badge">Unique pick</span>'
@@ -172,11 +109,11 @@ def render_grid(movie_ids, unique_ids=None):
             else ""
         )
         cards.append(
-            f'<div class="card"><div class="poster-wrap">{img}{badge}</div>'
+            f'<div class="card"><div class="poster">{art}{badge}</div>'
             f'<div class="card-title">{title}</div>'
             f'<div class="card-genres">{genres}</div></div>'
         )
-    st.markdown(f'<div class="grid">{"".join(cards)}</div>', unsafe_allow_html=True)
+    st.html(f'<div class="row">{"".join(cards)}</div>')
 
 
 def get_main_genre(user_id):
@@ -198,22 +135,26 @@ def get_active_users(min_ratings=20):
     return counts[counts >= min_ratings].index.tolist()
 
 
-st.markdown(
+st.html(
     '<div class="hero-title">Cine<span>Match</span></div>'
     '<div class="hero-stat">44.9% better than generic recommendations</div>'
     '<div class="hero-sub">A hybrid recommender that learns taste from behaviour, not just '
-    'genre labels — proven against a popularity baseline in a real A/B test (p = 0.00072).</div>',
-    unsafe_allow_html=True,
+    'genre labels — proven against a popularity baseline in a real A/B test (p = 0.00072).</div>'
 )
 
 with st.expander("How does this work?"):
     st.write(
-        "**Two very different approaches.** The left side just shows what's popular with "
-        "everyone — no personalization at all. The right side blends two techniques: one "
-        "looks at what a movie is about (genre), the other looks at people — who rates "
-        "movies the way you do, and what they loved. That second one is collaborative "
-        "filtering, and it's the real engine behind your personalized picks.\n\n"
-        "We put this to the test against the popularity approach in a real A/B experiment: "
+        "**Three approaches, side by side.**\n\n"
+        "**Genre matching** looks only at what a movie *is* — same genres, same tags. "
+        "It produces the most obvious-looking list and, surprisingly, the weakest results.\n\n"
+        "**Popularity** ignores you entirely and shows what most people rate highly. "
+        "It's a hard baseline to beat precisely because popular films really are widely liked.\n\n"
+        "**Our hybrid** is mostly collaborative filtering — it finds people who rate movies "
+        "the way you do and recommends what *they* loved, blended with a little genre "
+        "signal. It doesn't care what a film is about, which is why its picks can look "
+        "unexpected.\n\n"
+        "The hit rates come from evaluating each model against ratings it had never seen. "
+        "The hybrid's advantage over popularity was confirmed in a real A/B experiment: "
         "a 44.9% lift, statistically significant at p = 0.00072. "
         "[See the full write-up on GitHub](https://github.com/himanshumjain15/recommendation-system)."
     )
@@ -227,13 +168,11 @@ PERSONAS = {
     "The Thriller Fan": (610, "Thriller"),
 }
 
-pick_col, btn_col, _ = st.columns([2, 1, 2])
+pick_col, btn_col, _ = st.columns([2, 1, 2], vertical_alignment="bottom")
 with pick_col:
     choice = st.selectbox("Pick a viewer", list(PERSONAS.keys()) + ["Surprise me"])
 with btn_col:
-    st.write("")
-    st.write("")
-    go = st.button("Get recommendations", type="primary", use_container_width=True)
+    go = st.button("Get recommendations", type="primary", width="stretch")
 
 if go:
     if choice == "Surprise me":
@@ -244,14 +183,17 @@ if go:
     genre_label = f"{main_genre} movies" if main_genre else "their favourite genre"
 
     with st.spinner("Finding movies for you..."):
-        hybrid_ids = requests.get(
-            f"{API_BASE}/recommend/{user_id}", params={"model_name": "hybrid"}
-        ).json()["recommendations"]
-        popularity_ids = requests.get(
-            f"{API_BASE}/recommend/{user_id}", params={"model_name": "popularity"}
-        ).json()["recommendations"]
+        def fetch(model_name):
+            return requests.get(
+                f"{API_BASE}/recommend/{user_id}", params={"model_name": model_name}
+            ).json()["recommendations"]
 
-        unique_to_hybrid = [m for m in hybrid_ids if m not in popularity_ids]
+        content_ids = fetch("content")
+        popularity_ids = fetch("popularity")
+        hybrid_ids = fetch("hybrid")
+
+        baseline_ids = set(popularity_ids) | set(content_ids)
+        unique_to_hybrid = [m for m in hybrid_ids if m not in baseline_ids]
         hybrid_movies = movies[movies["movieId"].isin(hybrid_ids)]
         surprising = get_surprising_genres(hybrid_movies, main_genre) if main_genre else []
 
@@ -260,40 +202,43 @@ if go:
         if choice == "Surprise me"
         else f"Fans of {genre_label}"
     )
-    if surprising:
-        personal_sub = (
-            "We don't just match genres — we match people. "
+    personal_sub = (
+        "We don't just match genres — we match people. "
+        + (
             f"{subject} share taste patterns with people who also love "
             f"{' and '.join(surprising)}."
+            if surprising
+            else f"{subject} often love movies you wouldn't expect."
         )
-    else:
-        personal_sub = (
-            "We don't just match genres — we match people. "
-            f"{subject} often love movies you wouldn't expect."
-        )
+    )
 
-    st.write("")
-    col1, col2 = st.columns(2, gap="large")
+    st.html(
+        '<div class="row-head generic">More of what you already like'
+        '<span class="score">5% hit rate</span></div>'
+        f'<div class="row-sub">Pure genre matching. You like {genre_label}? Here are '
+        f'more {genre_label}. It looks exactly right — and it performs worst of the three.</div>'
+    )
+    render_row(content_ids)
 
-    with col1:
-        st.markdown('<div class="col-header generic">Everyone\'s favourites</div>', unsafe_allow_html=True)
-        st.markdown(
-            '<div class="col-sub">The same list for every viewer, whoever they are — '
-            'we just skip what you\'ve already rated.</div>',
-            unsafe_allow_html=True,
-        )
-        render_grid(popularity_ids)
+    st.html(
+        '<div class="row-head generic">Everyone\'s favourites'
+        '<span class="score">31% hit rate</span></div>'
+        '<div class="row-sub">The same list for every viewer, whoever they are — '
+        'we just skip what you\'ve already rated.</div>'
+    )
+    render_row(popularity_ids)
 
-    with col2:
-        st.markdown('<div class="col-header personal">We think you\'ll love these</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="col-sub">{personal_sub}</div>', unsafe_allow_html=True)
-        render_grid(hybrid_ids, unique_ids=unique_to_hybrid)
+    st.html(
+        '<div class="row-head personal">We think you\'ll love these'
+        '<span class="score best">44% hit rate</span></div>'
+        f'<div class="row-sub">{personal_sub}</div>'
+    )
+    render_row(hybrid_ids, unique_ids=unique_to_hybrid)
 
-    st.markdown(
+    st.html(
         f'<div class="summary"><b>{len(unique_to_hybrid)} of {len(hybrid_ids)}</b> '
-        "personalized picks are movies the generic popularity list would never have "
-        "shown this viewer.</div>",
-        unsafe_allow_html=True,
+        "personalized picks are movies neither genre matching nor the popularity list "
+        "would have shown this viewer.</div>"
     )
 
 st.divider()

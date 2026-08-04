@@ -39,9 +39,11 @@ def recommend(user_id: int, k: int = 10, model_name: str = "hybrid"):
     if model_name == "popularity":
         recs = recommend_popular(user_id, train, popularity_ranking, k=k)
     else:
+        # weight=1.0 is pure content-based (no CF); 0.1 is the tuned hybrid blend
+        weight = 1.0 if model_name == "content" else 0.1
         recs = get_hybrid_recommendations(
             user_id, train, movies, model, user_id_map, movie_idx_to_id,
-            content_similarity, k=k, weight=0.1,
+            content_similarity, k=k, weight=weight,
         )
 
     if recs:
