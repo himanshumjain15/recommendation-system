@@ -9,14 +9,29 @@ techniques (collaborative filtering + content-based filtering), then proves — 
 statistically significant, real experiment — that this personalized approach meaningfully
 outperforms just showing everyone a generic "most popular" list.
 
-**Live demo**: `http://3.134.153.110:8000/recommend/{user_id}` (see [Deployment](#deployment))
+### Try it
+
+**[CineMatch — interactive demo](https://himanshumjain15-recsys.streamlit.app)** — pick a
+viewer and see the same person's recommendations from three different models side by side.
+
+The demo calls a live API rather than bundling a copy of the model:
+
+| | |
+|---|---|
+| Recommendations | `http://3.134.153.110:8000/recommend/{user_id}?model_name=hybrid` |
+| Also accepts | `model_name=popularity`, `model_name=content` |
+| Interactive API docs | `http://3.134.153.110:8000/docs` |
+| Health check | `http://3.134.153.110:8000/health` |
+
+The API runs on a single EC2 instance that is occasionally switched off to control costs —
+the demo degrades gracefully and tells you so if it can't reach it.
 
 ## Skills demonstrated
 
 Machine learning modeling · Statistical experiment design (A/B testing, power analysis) ·
 Database design (PostgreSQL) · REST API development (FastAPI) · Containerization (Docker) ·
-Cloud deployment (AWS EC2) · Production debugging (four real deployment issues diagnosed
-and fixed, documented below)
+Cloud deployment (AWS EC2 + Streamlit Community Cloud) · Production debugging (five real
+deployment issues diagnosed and fixed, documented below)
 
 ## Results
 
@@ -48,15 +63,17 @@ Offline model comparison (full population, before the live A/B split):
 
 ```mermaid
 flowchart LR
-    A[MovieLens CSVs] --> B[Postgres]
-    B --> C[FastAPI]
-    C -->|logs every recommendation| B
-    C --> D[Docker Compose]
-    D --> E[AWS EC2]
-    F[ALS collaborative filtering] --> C
+    A[MovieLens CSVs] --> B[(Postgres)]
+    F[ALS collaborative filtering] --> C[FastAPI]
     G[TF-IDF content similarity] --> C
-    F -.trained on.-> B
-    G -.trained on.-> B
+    H[Popularity ranking] --> C
+    B -.trains.-> F
+    B -.trains.-> G
+    B -.trains.-> H
+    C -->|logs every recommendation| B
+    C --> D[Docker Compose<br/>on AWS EC2]
+    S[Streamlit demo<br/>Community Cloud] -->|HTTP| D
+    U((Visitor)) --> S
 ```
 
 - **Data layer**: Postgres (`users`, `items`, `interactions`, `recommendation_logs`,
@@ -80,13 +97,16 @@ Docker Compose, AWS EC2, `scipy`/`statsmodels` for the A/B significance test.
 ## Project structure
 
 ```
-sample_data/inputs/   # raw MovieLens files (gitignored, downloaded via setup below)
-parser/                # data loading + train/held-out split
-scoring/                # popularity, collaborative filtering, content-based, hybrid logic
-db/                       # Postgres schema, ingestion, experiment assignment/generation scripts
-api/                     # FastAPI app
-notebooks/          # EDA, modeling, and A/B analysis notebooks
-Dockerfile, docker-compose.yml, requirements.txt
+sample_data/inputs/  # raw MovieLens files (gitignored, downloaded on demand)
+parser/              # data loading + train/held-out split
+scoring/             # popularity, collaborative filtering, content-based, hybrid logic
+db/                  # Postgres schema, ingestion, experiment assignment/generation
+api/                 # FastAPI app
+streamlit_app/       # CineMatch — the public demo
+notebooks/           # EDA, modeling, and A/B analysis notebooks
+Dockerfile, docker-compose.yml
+requirements.txt     # demo dependencies (Streamlit Community Cloud reads this)
+requirements-api.txt # API dependencies (used by the Dockerfile)
 ```
 
 ## Setup — local development
@@ -118,10 +138,17 @@ API available at `http://localhost:8000`. `/health` for a status check,
 
 ## Deployment
 
-Deployed to a single AWS EC2 instance (`t3.micro`, Ubuntu) via the same Docker Compose
-setup used locally — no separate deployment config. An Elastic IP (`3.134.153.110`) keeps
-the public address fixed across instance restarts, so the URL above stays valid even if
-the underlying instance is stopped and started again.
+Two pieces, deployed separately.
+
+**The API and database** run on a single AWS EC2 instance (`t3.micro`, Ubuntu) using the
+same Docker Compose setup as local development — no separate deployment config. An Elastic
+IP (`3.134.153.110`) keeps the address fixed across instance restarts, so published links
+survive the instance being stopped and started.
+
+**The demo** runs on Streamlit Community Cloud, deployed straight from this repository. It
+holds no model of its own — it calls the EC2 API over HTTP, so what a visitor sees is the
+deployed system's actual output rather than a local copy. Because the raw data isn't
+committed, the app downloads the MovieLens archive on first run.
 
 ## Challenges & solutions
 
@@ -143,6 +170,11 @@ rather than avoided:
   couple of rebuilds, blocking further deployments — cleaned up with `docker system prune`
   as an immediate fix, then resolved permanently by resizing the EBS volume to 20GB and
   extending the filesystem (`growpart` + `resize2fs`).
+- **A caching failure that outlived its cause**: the demo first deployed with an invalid
+  TMDB key, so every poster lookup returned nothing — and `@st.cache_data` stored those
+  empty results. Correcting the key changed nothing, because the cached failures were
+  served instead of re-running the lookup. Rebooting the app cleared it. A reminder that
+  caching a failure is different from caching a result.
 
 ## Known limitations
 

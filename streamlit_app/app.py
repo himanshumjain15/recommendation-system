@@ -172,10 +172,17 @@ movies = load_csv("movies.csv")
 ratings = load_csv("ratings.csv")
 links = load_csv("links.csv")
 
+if not TMDB_API_KEY:
+    st.warning(
+        "No TMDB API key found, so posters will fall back to titles. Set `TMDB_API_KEY` "
+        "in `.env` locally, or in the app's secrets when deployed.",
+        icon=":material/image_not_supported:",
+    )
+
 
 @st.cache_data(show_spinner=False)
 def get_poster_url(tmdb_id):
-    if pd.isna(tmdb_id):
+    if not TMDB_API_KEY or pd.isna(tmdb_id):
         return None
     try:
         response = requests.get(
