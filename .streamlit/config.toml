@@ -10,8 +10,8 @@ linkUnderline = false
 baseRadius = "4px"
 buttonRadius = "4px"
 
-font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap"
-headingFont = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@700;800;900&display=swap"
+font = "Manrope:https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+headingFont = "Archivo:https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&display=swap"
 baseFontSize = 16
-headingFontSizes = ["54px", "30px", "22px", "18px", "16px", "14px"]
+headingFontSizes = ["56px", "30px", "22px", "18px", "16px", "14px"]
 headingFontWeights = [900, 800, 800, 700, 700, 700]

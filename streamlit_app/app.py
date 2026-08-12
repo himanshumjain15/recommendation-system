@@ -131,6 +131,19 @@ POSTER_CSS = """
 .taste-pct { color: #7C7C7C; }
 .taste-track { height: 6px; background: #262626; border-radius: 3px; overflow: hidden; }
 .taste-fill { height: 100%; background: #E50914; border-radius: 3px; }
+
+.footer { border-top: 1px solid #242424; margin-top: 3rem; padding-top: 1.6rem;
+          display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px 34px; }
+.footer-main { flex: 1; min-width: 220px; }
+.footer-name { font-family: 'Archivo', sans-serif; font-size: 1.05rem; font-weight: 800;
+               color: #EDEDED; }
+.footer-role { font-size: .82rem; color: #7A7A7A; margin-top: 2px; }
+.footer-links { display: flex; gap: 22px; }
+.footer-links a { font-size: .88rem; font-weight: 600; color: #C8C8C8;
+                  text-decoration: none; border-bottom: 1px solid #3A3A3A; padding-bottom: 2px; }
+.footer-links a:hover { color: #E50914; border-bottom-color: #E50914; }
+.footer-note { flex: 0 0 100%; font-size: .76rem; color: #656565; line-height: 1.6;
+               margin-top: .4rem; }
 </style>
 """
 st.html(POSTER_CSS)
@@ -303,10 +316,11 @@ with st.expander("How does this work?"):
 PERSONAS = {
     ":material/bolt: The action fan": (380, "Action"),
     ":material/family_restroom: The family viewer": (20, "Animation"),
-    ":material/mood: The comedy lover": (414, "Comedy"),
+    ":material/mood: The comedy lover": (89, "Comedy"),
+    ":material/theaters: The drama devotee": (74, "Drama"),
     ":material/favorite: The romantic": (594, "Romance"),
     ":material/rocket_launch: The sci-fi fan": (186, "Sci-Fi"),
-    ":material/visibility: The thriller seeker": (610, "Thriller"),
+    ":material/visibility: The thriller seeker": (80, "Thriller"),
 }
 
 def use_persona():
@@ -420,9 +434,20 @@ st.html(
     "would have shown this viewer.</div>"
 )
 
-st.divider()
-st.caption(
-    "Both the popularity and personalized recommendations are generated from the "
-    "MovieLens (ml-latest-small) research dataset, containing ratings from 1996 to 2018 "
-    "— not a live catalog, and not real-time viewer data."
+st.html(
+    '<div class="footer">'
+    '<div class="footer-main">'
+    '<div class="footer-name">Built by Himanshu Jain</div>'
+    '<div class="footer-role">MS Data Science, University of Colorado Boulder</div>'
+    "</div>"
+    '<div class="footer-links">'
+    '<a href="https://github.com/himanshumjain15/recommendation-system">Source code</a>'
+    '<a href="https://himanshumjain15.github.io/Portfolio/">Portfolio</a>'
+    f'<a href="{API_BASE}/docs">API</a>'
+    "</div>"
+    '<div class="footer-note">'
+    "Recommendations come from the MovieLens (ml-latest-small) research dataset — "
+    "ratings collected between 1996 and 2018. Not a live catalogue, and not real-time "
+    "viewer data. Posters courtesy of TMDB, which did not endorse this project."
+    "</div></div>"
 )
