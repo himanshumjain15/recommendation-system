@@ -14,17 +14,9 @@ outperforms just showing everyone a generic "most popular" list.
 **[CineMatch, the interactive demo](https://himanshumjain15-recsys.streamlit.app)**. Pick a
 viewer and see the same person's recommendations from three different models side by side.
 
-The demo calls a live API rather than bundling a copy of the model:
-
-| | |
-|---|---|
-| Recommendations | `http://3.134.153.110:8000/recommend/{user_id}?model_name=hybrid` |
-| Also accepts | `model_name=popularity`, `model_name=content` |
-| Interactive API docs | `http://3.134.153.110:8000/docs` |
-| Health check | `http://3.134.153.110:8000/health` |
-
-The API runs on a single EC2 instance that is occasionally switched off to control costs.
-The demo degrades gracefully and says so if it can't reach it.
+The demo is a thin front end. It calls a live API running on AWS, so what you see is the
+deployed system's real output. Endpoints are listed under
+[Deployment](#deployment).
 
 ## Skills demonstrated
 
@@ -35,9 +27,11 @@ deployment issues diagnosed and fixed, documented below)
 
 ## Results
 
-**The headline finding**: personalized recommendations beat a generic popularity list by a
-wide, statistically proven margin, validated with a real A/B test rather than a notebook
-comparison.
+**In plain terms: the personalized model found something a viewer genuinely liked for 43
+out of every 100 viewers. Showing everyone the same popular films worked for 31.** That gap
+held up under a proper significance test, so it isn't chance.
+
+The numbers behind that, from the A/B experiment:
 
 | Group | Hit-rate@10 | n | 95% CI |
 |---|---|---|---|
@@ -48,8 +42,8 @@ comparison.
 significant, clearing the pre-registered minimum detectable effect (15% relative lift) even
 at the conservative end of the confidence interval.
 
-*(Hit-rate@10 = the percentage of users for whom at least one of the top 10 recommended
-movies was something they actually went on to rate highly.)*
+*(Hit-rate@10 counts a viewer as a hit if at least one of the ten recommended films was
+something they went on to rate highly in data the model never saw.)*
 
 Offline model comparison (full population, before the live A/B split):
 
@@ -144,6 +138,16 @@ Two pieces, deployed separately.
 same Docker Compose setup as local development, with no separate deployment config. An
 Elastic IP (`3.134.153.110`) keeps the address fixed across instance restarts, so published
 links survive the instance being stopped and started.
+
+| | |
+|---|---|
+| Recommendations | `http://3.134.153.110:8000/recommend/{user_id}?model_name=hybrid` |
+| Also accepts | `model_name=popularity`, `model_name=content` |
+| Interactive API docs | `http://3.134.153.110:8000/docs` |
+| Health check | `http://3.134.153.110:8000/health` |
+
+The instance is occasionally switched off to control costs. The demo degrades gracefully
+and says so if it can't reach the API.
 
 **The demo** runs on Streamlit Community Cloud, deployed straight from this repository. It
 holds no model of its own. It calls the EC2 API over HTTP, so what a visitor sees is the
