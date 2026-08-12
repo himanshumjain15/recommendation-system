@@ -279,9 +279,9 @@ backdrop = "".join(f'<img src="{u}">' for u in hero_backdrop())
 st.html(
     f'<div class="hero"><div class="hero-bg">{backdrop}</div><div class="hero-fg">'
     '<div class="hero-title">Cine<span>Match</span></div>'
-    '<div class="hero-stat">Lands a hit for 44 viewers in 100 — popularity manages 31</div>'
-    '<div class="hero-sub">A hybrid recommender that learns taste from behaviour, not '
-    'just genre labels — proven against a popularity baseline in a real A/B test '
+    '<div class="hero-stat">Lands a hit for 44 viewers in 100. Popularity manages 31</div>'
+    '<div class="hero-sub">A hybrid recommender that learns taste from behaviour rather '
+    'than genre labels, proven against a popularity baseline in a real A/B test '
     '(p = 0.00072).</div>'
     '</div></div>'
 )
@@ -289,13 +289,13 @@ st.html(
 APPROACHES = [
     ("Our hybrid", 44, True,
      "Finds people who liked the same films as this viewer, and recommends what "
-     "<em>they</em> loved — with a little genre signal mixed in. It doesn't care what a "
+     "<em>they</em> loved, with a little genre signal mixed in. It doesn't care what a "
      "film is about, which is why its picks can look unexpected."),
     ("Popularity", 31, False,
      "Ignores the viewer entirely and shows what most people rate highly. A hard baseline "
      "to beat, because popular films really are widely liked."),
     ("Genre matching", 5, False,
-     "Looks only at what a film <em>is</em> — same genres, same tags. Produces the most "
+     "Looks only at what a film <em>is</em>: same genres, same tags. Produces the most "
      "obvious-looking list and, surprisingly, the weakest results."),
 ]
 
@@ -315,7 +315,7 @@ with st.expander("How does this work?"):
         "history from the model, then checked whether its recommendations included "
         "something that viewer went on to rate highly. The hybrid managed that for 44 "
         "viewers in 100; pure genre matching managed it for 5.\n\n"
-        "The hybrid's advantage over popularity was confirmed in a real A/B experiment — "
+        "The hybrid's advantage over popularity was confirmed in a real A/B experiment: "
         "a 44.9% lift, statistically significant at p = 0.00072. "
         "[See the full write-up on GitHub](https://github.com/himanshumjain15/recommendation-system)."
     )
@@ -407,7 +407,7 @@ personal_sub = (
     f"Not just more {genre_label}. People who liked the same films as this viewer also "
     f"loved {' and '.join(surprising)}."
     if surprising
-    else "Drawn from people who liked the same films as this viewer — not from what the "
+    else "Drawn from people who liked the same films as this viewer, not from what the "
     "films happen to be about."
 )
 
@@ -421,7 +421,7 @@ render_row(hybrid_ids, unique_ids=unique_to_hybrid)
 st.html(
     '<div class="row-head generic">Everyone\'s favourites'
     '<span class="score">works for 31 in 100</span></div>'
-    '<div class="row-sub">Ranked purely by how many people rated each film — the same '
+    '<div class="row-sub">Ranked purely by how many people rated each film. The same '
     "ranking for everyone, minus whatever this viewer has already rated. Heavy raters "
     'have seen the famous ones, so what surfaces here differs.</div>'
 )
@@ -453,7 +453,7 @@ st.html(
     f'<a href="{API_BASE}/docs">API</a>'
     "</div>"
     '<div class="footer-note">'
-    "Recommendations come from the MovieLens (ml-latest-small) research dataset — "
+    "Recommendations come from the MovieLens (ml-latest-small) research dataset, "
     "ratings collected between 1996 and 2018. Not a live catalogue, and not real-time "
     "viewer data. Posters courtesy of TMDB, which did not endorse this project."
     "</div></div>"
