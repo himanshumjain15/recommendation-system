@@ -5,7 +5,6 @@ Case study content for the portfolio site. Sections match the `ProjectCaseStudy`
 **Live demo**: https://himanshumjain15-recsys.streamlit.app
 **Code**: https://github.com/himanshumjain15/recommendation-system
 
----
 
 ## Overview
 
@@ -21,7 +20,26 @@ Most recommender projects stop at a notebook with an accuracy score. This one sh
 Postgres database, a REST API, containerized deployment, an experiment with a
 pre-registered success threshold, and a front end anyone can click.
 
----
+
+## Results
+
+From the A/B experiment, with viewers split into two groups and each group served by a
+different model:
+
+| Group | Hit-rate@10 | n | 95% CI |
+|---|---|---|---|
+| Control (popularity) | 29.35% | 293 | 24.43% to 34.81% |
+| Treatment (hybrid) | 42.54% | 315 | 37.20% to 48.06% |
+
+**Lift: 13.19 percentage points, a 44.9% relative improvement, p = 0.00072.**
+
+The lift's confidence interval runs from 5.64 to 20.74 points. Even its pessimistic end
+clears the 4.67-point threshold set before the experiment ran, so the result is practically
+as well as statistically significant.
+
+Hit-rate@10 counts a viewer as a hit if at least one of the ten recommended films was
+something they went on to rate highly in data the model never saw.
+
 
 ## Problem statement and approach
 
@@ -57,15 +75,11 @@ sparse users and why a content signal was worth blending in at all. Separately, 
 of films absorbed 60% of all ratings, which is what made the popularity baseline a serious
 opponent rather than a strawman.
 
----
 
 ## System architecture
 
-```
-MovieLens data ──> Postgres ──> three models ──> FastAPI ──> Streamlit demo
-                      ^                             │
-                      └──── logs every recommendation
-```
+MovieLens data feeds Postgres, which trains three models. FastAPI serves them and logs
+every recommendation back to Postgres. The Streamlit demo calls that API over HTTP.
 
 - **Data layer**: Postgres with five tables (`users`, `items`, `interactions`,
   `recommendation_logs`, `experiment_assignments`), schema initialized automatically on
@@ -79,7 +93,6 @@ MovieLens data ──> Postgres ──> three models ──> FastAPI ──> Str
 - **Front end**: a Streamlit app that calls the live API rather than holding its own copy
   of the model, so what a visitor sees is the deployed system's real output.
 
----
 
 ## Key features
 
@@ -105,7 +118,6 @@ selected for genuinely dominant taste, each shown alongside their actual genre b
 An earlier version labelled a user "the comedy lover" who turned out to be 57% drama and
 only 36% comedy; the labels were corrected once the breakdown was displayed next to them.
 
----
 
 ## Technical stack
 
@@ -118,7 +130,6 @@ only 36% comedy; the labels were corrected once the breakdown was displayed next
 
 **Front end**: Streamlit with custom CSS, TMDB API for poster art
 
----
 
 ## Deployment
 
@@ -136,7 +147,6 @@ API over HTTP.
 Because the raw dataset is deliberately not committed to the repository, both the container
 build and the demo download it on first run, so a fresh clone works without manual setup.
 
----
 
 ## Challenges and solutions
 
@@ -169,24 +179,6 @@ Correcting the key changed nothing, because the cache answered instead of retryi
 restart cleared it. Caching a failure is not the same as caching a result, and the app now
 says so out loud when the key is missing instead of failing quietly.
 
----
-
-## Results
-
-From the A/B experiment:
-
-| Group | Hit-rate@10 | n | 95% CI |
-|---|---|---|---|
-| Control (popularity) | 29.35% | 293 | 24.43% to 34.81% |
-| Treatment (hybrid) | 42.54% | 315 | 37.20% to 48.06% |
-
-**Lift: 13.19 percentage points, a 44.9% relative improvement, p = 0.00072.**
-
-The lift's confidence interval runs from 5.64 to 20.74 points. Even its pessimistic end
-clears the 4.67-point threshold set before the experiment ran, so the result is practically
-as well as statistically significant.
-
----
 
 ## Honest limitations
 
@@ -207,7 +199,6 @@ performance on the data later used for the significance test, which gives the hy
 small home advantage. A stricter design would separate a validation set for tuning from an
 untouched test set.
 
----
 
 ## Improvements
 
