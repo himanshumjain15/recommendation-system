@@ -109,12 +109,10 @@ requirements-api.txt # API dependencies (used by the Dockerfile)
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-
-# Download the dataset (not committed, fetched fresh)
-Invoke-WebRequest -Uri "https://files.grouplens.org/datasets/movielens/ml-latest-small.zip" -OutFile "sample_data\inputs\ml-latest-small.zip"
-Expand-Archive -Path "sample_data\inputs\ml-latest-small.zip" -DestinationPath "sample_data\inputs" -Force
-Remove-Item "sample_data\inputs\ml-latest-small.zip"
 ```
+
+The MovieLens `ml-latest-small` dataset is committed under `sample_data/inputs/`, so no
+separate download step is needed.
 
 Open `notebooks/` in VS Code, select the `.venv` kernel, and run in order:
 `01-explore-data.ipynb` → `02-baseline-models.ipynb` → `03-hybrid-model.ipynb` →
@@ -151,8 +149,7 @@ and says so if it can't reach the API.
 
 **The demo** runs on Streamlit Community Cloud, deployed straight from this repository. It
 holds no model of its own. It calls the EC2 API over HTTP, so what a visitor sees is the
-deployed system's actual output rather than a local copy. Because the raw data isn't
-committed, the app downloads the MovieLens archive on first run.
+deployed system's actual output rather than a local copy.
 
 ## Challenges and solutions
 

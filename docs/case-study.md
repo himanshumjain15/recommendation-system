@@ -144,8 +144,9 @@ The demo runs on Streamlit Community Cloud, deployed straight from the GitHub re
 and redeployed automatically on every push. It holds no model of its own and calls the EC2
 API over HTTP.
 
-Because the raw dataset is deliberately not committed to the repository, both the container
-build and the demo download it on first run, so a fresh clone works without manual setup.
+The MovieLens dataset is small enough to commit directly to the repository, so a fresh
+clone or deploy works immediately with no download step and no dependency on an external
+host's uptime.
 
 
 ## Challenges and solutions
