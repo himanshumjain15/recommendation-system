@@ -7,8 +7,11 @@ CLAUDE.md
 .venv/
 venv/
 
-# Raw/processed data — downloaded via README instructions, not committed
-sample_data/inputs/
+# Raw data — ml-latest-small is committed (see sample_data/inputs/ml-latest-small)
+# since it's small and downloading it at runtime depends on GroupLens's uptime.
+# Anything else placed in sample_data/inputs (e.g. a larger MovieLens variant) stays ignored.
+sample_data/inputs/*
+!sample_data/inputs/ml-latest-small/
 sample_data/outputs/
 
 # Python
